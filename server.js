@@ -1,19 +1,28 @@
-const dotenv = require('dotenv');
+//mongoose.connection as db
+import db from "./db/connection.js"; // mongoose.connection
+import express from "express";
+import logger from "morgan";
+import chalk from "chalk";
+import dotenv from "dotenv";
 dotenv.config();
-const express = require('express');
-const app = express();
-const mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGODB_URI);
+const app = express()
+const PORT = process.env.PORT || 3000;
 
-mongoose.connection.on('connected', () => {
-  console.log(`Connected to MongoDB ${mongoose.connection.name}.`);
-});
 
-app.use(express.json());
+//TBU: Add more middleware (cors, express.json)
 
-// Routes go here
+app.use(logger("dev"));
 
-app.listen(3000, () => {
-  console.log('The express app is ready!');
-});
+
+//TBU: Add route
+
+
+db.on("connected", () => {
+  console.clear();
+  console.log(chalk.blue("Connected to MongoDB!"));
+
+  app.listen(PORT, () => {
+    console.log(`Express server running on port: ${PORT}`);
+  });
+})
